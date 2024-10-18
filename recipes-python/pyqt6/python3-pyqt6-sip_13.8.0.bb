@@ -1,9 +1,9 @@
 SUMMARY = "The sip module support for PyQt6"
 HOMEPAGE = "https://pypi.org/project/PyQt6-sip/"
 LICENSE = "GPL-2.0-or-later"
-LIC_FILES_CHKSUM = "file://LICENSE;md5=9cd437778ebd1c056a76b4ded73b3a6d"
+LIC_FILES_CHKSUM = "file://LICENSE;md5=ed1d69a33480ebf4ff8a7a760826d84e"
 
-SRC_URI[sha256sum] = "2486e1588071943d4f6657ba09096dc9fffd2322ad2c30041e78ea3f037b5778"
+SRC_URI[sha256sum] = "2f74cf3d6d9cab5152bd9f49d570b2dfb87553ebb5c4919abfde27f5b9fd69d4"
 
 inherit pypi setuptools3
 
