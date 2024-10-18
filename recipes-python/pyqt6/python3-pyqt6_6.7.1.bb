@@ -8,7 +8,7 @@ inherit pypi python3targetconfig python3-dir qt6-qmake qt6-paths
 
 PYPI_PACKAGE = "PyQt6"
 
-SRC_URI[sha256sum] = "3d31b2c59dc378ee26e16586d9469842483588142fc377280aad22aaf2fa6235"
+SRC_URI[sha256sum] = "3672a82ccd3a62e99ab200a13903421e2928e399fda25ced98d140313ad59cb9"
 
 S = "${WORKDIR}/PyQt6-${PV}"
 B = "${S}/build"
