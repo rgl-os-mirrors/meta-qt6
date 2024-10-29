@@ -19,6 +19,9 @@ DEPENDS += "qtbase qtgrpc-native protobuf protobuf-native"
 
 PACKAGECONFIG[examples] = "-DQT_BUILD_EXAMPLES=ON,-DQT_BUILD_EXAMPLES=OFF,qtdeclarative qtdeclarative-native"
 
+# workaround for missing protobuf support on kirkstone
+ALLOW_EMPTY:${PN}-tools = "1"
+
 BBCLASSEXTEND = "native nativesdk"
 
 INSANE_SKIP:${PN}-ptest += "buildpaths"
