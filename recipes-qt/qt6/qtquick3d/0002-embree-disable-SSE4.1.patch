@@ -1,0 +1,71 @@
+From 32e1b31a4985181b3af28e2132dd34c0cd75b192 Mon Sep 17 00:00:00 2001
+From: Samuli Piippo <samuli.piippo@qt.io>
+Date: Tue, 19 Nov 2024 12:01:12 +0000
+Subject: [PATCH] embree: disable SSE4.1
+
+Disable also __SSE4.1__, this fixes build issue with GCC 13
+after b0d6afa7e822728e2e7d198efe7eef6f78a429e0.
+
+| In function '__m128 _mm_dp_ps(__m128, __m128, int)',
+|     inlined from 'float embree::dot(const Vec3fa&, const Vec3fa&)' at src/3rdparty/embree/kernels/common/../../common/sys/../math/vec3fa.h:270:25,
+|     inlined from 'bool embree::similarityTransform(const AffineSpace3fa&, float*)' at src/3rdparty/embree/kernels/common/../../common/math/affinespace.h:324:12,
+|     inlined from 'bool pointQuery(embree::Scene*, RTCPointQuery*, RTCPointQueryContext*, RTCPointQueryFunction, void*)' at /home/qt/work/build/tmp/work/x86-64-v3-poky-linux/qtquick3d/6.5.8/git/src/3rdparty/embree/kernels/common/rtcore.cpp:323:49:
+| /usr/lib/x86_64-poky-linux/gcc/x86_64-poky-linux/13.3.0/include/smmintrin.h:243:10: error: '__builtin_ia32_dpps' needs isa option -msse4.1
+
+Pick-to: 6.8 6.8.1 6.5
+Fixes: QTBUG-131361
+Change-Id: Id71d6f933b6046c7a9cf40154b3ad2fb6abea8f6
+Upstream-Status: Pending
+---
+ src/3rdparty/embree/common/sys/platform.h           |  1 +
+ ...Embree-to-build-with-custom-compiler-flags.patch | 13 +++++++------
+ 2 files changed, 8 insertions(+), 6 deletions(-)
+
+diff --git a/src/3rdparty/embree/common/sys/platform.h b/src/3rdparty/embree/common/sys/platform.h
+index 5e218fa37..cd08a26cf 100644
+--- a/src/3rdparty/embree/common/sys/platform.h
++++ b/src/3rdparty/embree/common/sys/platform.h
+@@ -388,3 +388,4 @@ namespace embree
+ #undef __AVXI__
+ #undef __AVX__
+ #undef __SSE4_2__
++#undef __SSE4_1__
+diff --git a/src/3rdparty/embree/patches/0001-Allow-Embree-to-build-with-custom-compiler-flags.patch b/src/3rdparty/embree/patches/0001-Allow-Embree-to-build-with-custom-compiler-flags.patch
+index 33d1b79f1..c463f4867 100644
+--- a/src/3rdparty/embree/patches/0001-Allow-Embree-to-build-with-custom-compiler-flags.patch
++++ b/src/3rdparty/embree/patches/0001-Allow-Embree-to-build-with-custom-compiler-flags.patch
+@@ -1,4 +1,4 @@
+-From bcdf980cd1293e10e3f661e847f41b4e7ec3a4e4 Mon Sep 17 00:00:00 2001
++From e88ce86ad1bcac88804c80c3aeea60a80515703f Mon Sep 17 00:00:00 2001
+ From: Laszlo Agocs <laszlo.agocs@qt.io>
+ Date: Fri, 3 Jun 2022 10:35:15 +0200
+ Subject: [PATCH] Allow Embree to build with custom compiler flags
+@@ -8,14 +8,14 @@ that result in linker errors.
+ 
+ Change-Id: I60d8a77c449607762bd5449ead21180744c17dff
+ ---
+- src/3rdparty/embree/common/sys/platform.h | 8 ++++++++
+- 1 file changed, 8 insertions(+)
++ src/3rdparty/embree/common/sys/platform.h | 9 +++++++++
++ 1 file changed, 9 insertions(+)
+ 
+ diff --git a/src/3rdparty/embree/common/sys/platform.h b/src/3rdparty/embree/common/sys/platform.h
+-index 7ba5a19f..78d8afce 100644
++index abc784cee..8965c0626 100644
+ --- a/src/3rdparty/embree/common/sys/platform.h
+ +++ b/src/3rdparty/embree/common/sys/platform.h
+-@@ -376,3 +376,11 @@ namespace embree
++@@ -380,3 +380,12 @@ namespace embree
+    }
+  
+  }
+@@ -26,7 +26,8 @@ index 7ba5a19f..78d8afce 100644
+ +#undef __AVX2__
+ +#undef __AVXI__
+ +#undef __AVX__
+++#undef __SSE4_1__
+ +#undef __SSE4_2__
+ -- 
+-2.36.1.windows.1
++2.43.0
+ 
