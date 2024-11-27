@@ -194,6 +194,11 @@ do_install:append() {
     rm -f ${D}${QT6_INSTALL_MKSPECSDIR}/features/uikit/device_destinations.sh
     rm -f ${D}${QT6_INSTALL_MKSPECSDIR}/features/data/mac/objc_namespace.sh
 
+    if [ -e ${D}${QT6_INSTALL_EXAMPLESDIR}/corelib/serialization/cbordump/cbortag.py ]; then
+        sed -i ${D}${QT6_INSTALL_EXAMPLESDIR}/corelib/serialization/cbordump/cbortag.py \
+            -e 's|/bin/env|/usr/bin/env|'
+    fi
+
     # remove unneeded files that contains reference to TMPDIR [buildpaths]
     rm -f ${D}${QT6_INSTALL_BINDIR}/host-*
     rm -f ${D}${QT6_INSTALL_BINDIR}/target_qt.conf
