@@ -53,8 +53,9 @@ PACKAGECONFIG_GRAPHICS ?= "\
     ${@bb.utils.filter('DISTRO_FEATURES', 'vulkan', d)} \
     ${@bb.utils.filter('DISTRO_FEATURES', 'wayland', d)} \
     ${@bb.utils.contains('DISTRO_FEATURES', 'opengl', \
-        bb.utils.contains('DISTRO_FEATURES', 'x11', 'gl', 'kms gbm gles2 eglfs', d), 'no-opengl linuxfb', d)} \
+        bb.utils.contains('DISTRO_FEATURES', 'x11', 'gl', 'kms gbm gles2 eglfs', d), 'no-opengl', d)} \
     ${@bb.utils.contains('DISTRO_FEATURES', 'directfb', 'directfb', '', d)} \
+    linuxfb \
 "
 PACKAGECONFIG_X11 ?= "${@bb.utils.contains('DISTRO_FEATURES', 'x11', 'xcb', '', d)}"
 PACKAGECONFIG_KDE ?= "${@bb.utils.contains('DISTRO_FEATURES', 'kde', 'sm cups kms gbm sql-sqlite', '', d)}"
