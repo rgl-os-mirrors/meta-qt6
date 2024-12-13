@@ -5,15 +5,17 @@ EXCLUDE_FROM_WORLD = "1"
 
 inherit qt6-qmake
 
-SQUISH_MIRROR ?= "https://ci-files01-hki.ci.qt.io/input/squish/coin/67x"
+SQUISH_MIRROR ?= "https://ci-files01-hki.ci.qt.io/input/squish/releasepackages"
+
+SQUISH_INSTALLER = "squish-${PV}-qt68x-linux64.run"
 
 SRC_URI = "\
-    ${SQUISH_MIRROR}/squish-${PV}-qt67x-linux64.run;name=squish \
+    ${SQUISH_MIRROR}/${SQUISH_INSTALLER};name=squish \
     ${SQUISH_MIRROR}/squish-${PV}-qt-embedded-src.tar.gz;name=qt-squish-embedded \
 "
 
-SRC_URI[squish.sha256sum] = "5a84e611a9bdda23f5fcc3ee08945f99d13629afa695c6bb38c59bf4ad5c3591"
-SRC_URI[qt-squish-embedded.sha256sum] = "64fe9a6728c299fa29ee7c03077edd0562e9a79198511e74dd4d89ca9adddf2a"
+SRC_URI[squish.sha256sum] = "2ff96e9f2e8594833c186d0b34f12f2014b2fcd30f087e53edc39066587c42b6"
+SRC_URI[qt-squish-embedded.sha256sum] = "729870aafba482d7a772c930209830796a5c9d4a8ab0c49e8caa54738f1032e8"
 
 S = "${WORKDIR}/squish-${PV}-qt-embedded-src"
 B = "${WORKDIR}/build"
@@ -21,10 +23,16 @@ B = "${WORKDIR}/build"
 DEPENDS += "\
     qtbase \
     qt5compat \
-    qtdeclarative qtdeclarative-native \
-    qtapplicationmanager \
-    ${@bb.utils.contains('DISTRO_FEATURES', 'wayland', 'qtwayland qtwayland-native wayland wayland-native', '', d)} \
 "
+
+PACKAGECONFIG ?= "\
+    appman \
+    qml \
+    ${@bb.utils.filter('DISTRO_FEATURES', 'wayland', d)} \
+"
+PACKAGECONFIG[appman] = ",,qtapplicationmanager"
+PACKAGECONFIG[qml] = ",,qtdeclarative qtdeclarative-native"
+PACKAGECONFIG[wayland] = "--enable-wayland,--disable-wayland,qtwayland qtwayland-native wayland wayland-native"
 
 lcl_maybe_fortify = ""
 OE_QMAKE_PATH_HOST_LIBEXECS = "${STAGING_DIR_NATIVE}/${QT6_INSTALL_LIBEXECDIR}"
@@ -32,9 +40,9 @@ OE_QMAKE_PATH_HOST_LIBEXECS = "${STAGING_DIR_NATIVE}/${QT6_INSTALL_LIBEXECDIR}"
 do_install_squish[cleandirs] = "${WORKDIR}/squish"
 do_install_squish[network] = "1"
 do_install_squish() {
-    SQUISH_INSTALLER=${UNPACKDIR}/squish-${PV}-qt67x-linux64.run
+    SQUISH_INSTALLER=${UNPACKDIR}/${SQUISH_INSTALLER}
     if [ ! -e $SQUISH_INSTALLER ]; then
-        SQUISH_INSTALLER=${WORKDIR}/squish-${PV}-qt67x-linux64.run
+        SQUISH_INSTALLER=${WORKDIR}/${SQUISH_INSTALLER}
     fi
     chmod +x $SQUISH_INSTALLER
     TMPDIR=${WORKDIR}/tmp XDG_RUNTIME_DIR=${WORKDIR}/tmp $SQUISH_INSTALLER \
@@ -47,13 +55,13 @@ do_configure() {
         --enable-qmake-config \
         --enable-qt \
         --enable-server \
-        --enable-wayland \
         --with-qmake=${STAGING_DIR_NATIVE}${QT6_INSTALL_BINDIR}/qmake \
-        --with-squishidl=${WORKDIR}/squish/bin/squishidl
+        --with-squishidl=${WORKDIR}/squish/bin/squishidl \
+        ${PACKAGECONFIG_CONFARGS}
 }
 
 do_compile() {
-    ./build -j${@oe.utils.cpu_count()}
+    ./build ${@oe.utils.parallel_make_argument(d, '-j%d')}
 }
 
 do_install() {
@@ -65,6 +73,10 @@ do_install() {
     rmdir ${DESTDIR}/plugins
 
     sed -i -e 's|${RECIPE_SYSROOT}||' ${D}/opt/squish/etc/paths.ini
+
+    if [ -e ${D}/opt/squish/etc/squish-appman-hook.yaml ]; then
+        sed -i -e 's|PATH_TO_SQUISH|/opt/squish|' ${D}/opt/squish/etc/squish-appman-hook.yaml
+    fi
 
     install -d ${D}${sysconfdir}/profile.d
     echo "export SQUISH_PREFIX=/opt/squish" > ${D}${sysconfdir}/profile.d/squish.sh
