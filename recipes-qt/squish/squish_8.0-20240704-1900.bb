@@ -32,8 +32,12 @@ OE_QMAKE_PATH_HOST_LIBEXECS = "${STAGING_DIR_NATIVE}/${QT6_INSTALL_LIBEXECDIR}"
 do_install_squish[cleandirs] = "${WORKDIR}/squish"
 do_install_squish[network] = "1"
 do_install_squish() {
-    chmod +x ${WORKDIR}/squish-${PV}-qt67x-linux64.run
-    TMPDIR=${WORKDIR}/tmp XDG_RUNTIME_DIR=${WORKDIR}/tmp ${WORKDIR}/squish-${PV}-qt67x-linux64.run \
+    SQUISH_INSTALLER=${UNPACKDIR}/squish-${PV}-qt67x-linux64.run
+    if [ ! -e $SQUISH_INSTALLER ]; then
+        SQUISH_INSTALLER=${WORKDIR}/squish-${PV}-qt67x-linux64.run
+    fi
+    chmod +x $SQUISH_INSTALLER
+    TMPDIR=${WORKDIR}/tmp XDG_RUNTIME_DIR=${WORKDIR}/tmp $SQUISH_INSTALLER \
         -platform minimal unattended=1 targetdir=${WORKDIR}/squish ide=0
 }
 
@@ -85,3 +89,5 @@ FILES:${PN}-staticdev += "\
 "
 
 addtask install_squish after do_unpack before do_configure
+
+INSANE_SKIP:${PN}-src += "buildpaths"
