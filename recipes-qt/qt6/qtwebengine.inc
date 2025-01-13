@@ -12,6 +12,7 @@ LIC_FILES_CHKSUM = " \
 inherit qt6-cmake
 
 include recipes-qt/qt6/qt6-git.inc
+include recipes-qt/qt6/qt6-lts.inc
 include recipes-qt/qt6/qt6.inc
 
 inherit gettext
@@ -35,8 +36,5 @@ SRC_URI += " \
 
 SRC_URI += " \
     file://chromium/0001-v8-qemu-wrapper.patch;patchdir=src/3rdparty \
-    file://chromium/0002-chromium-workaround-for-too-long-.rps-file-name.patch;patchdir=src/3rdparty \
-    file://chromium/0003-avcodec-x86-mathops-clip-constants-used-with-shift-i.patch;patchdir=src/3rdparty \
 "
-
 SRCREV_FORMAT = "qtwebengine_qtwebengine-chromium"

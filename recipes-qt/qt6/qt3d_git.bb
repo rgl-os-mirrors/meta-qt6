@@ -19,13 +19,13 @@ inherit features_check
 REQUIRED_DISTRO_FEATURES = "opengl"
 
 include recipes-qt/qt6/qt6-git.inc
+include recipes-qt/qt6/qt6-lts.inc
 include recipes-qt/qt6/qt6.inc
 
 ASSIMP_BRANCH = "qt6_assimp"
 
 SRC_URI += " \
     ${QT_GIT}/${QT_GIT_PROJECT}/qtquick3d-assimp.git;name=qt3d-assimp;branch=${ASSIMP_BRANCH};protocol=${QT_GIT_PROTOCOL};destsuffix=git/src/3rdparty/assimp/src \
-    file://0001-Use-unqualified-uint32_t-everywhere-in-FBXBinaryToke.patch;patchdir=src/3rdparty/assimp/src \
 "
 
 DEPENDS = "qtbase qtdeclarative qtdeclarative-native qtshadertools qtshadertools-native"
