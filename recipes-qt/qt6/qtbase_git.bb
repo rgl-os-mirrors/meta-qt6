@@ -34,6 +34,7 @@ DEPENDS:remove:class-native = "qtbase-native"
 RDEPENDS_${PN}:remove:class-native = "libssl-native"
 
 RRECOMMENDS:${PN}:append:class-target = " locale-base-c"
+RRECOMMENDS:${PN}-ptest:append = " tzdata"
 
 PACKAGECONFIG:class-native ?= "\
     gui widgets jpeg png dbus no-opengl openssl zlib zstd \
@@ -131,7 +132,7 @@ PACKAGECONFIG[libinput] = "-DFEATURE_libinput=ON,-DFEATURE_libinput=OFF,libinput
 PACKAGECONFIG[linuxfb] = "-DFEATURE_linuxfb=ON,-DFEATURE_linuxfb=OFF"
 PACKAGECONFIG[mtdev] = "-DFEATURE_mtdev=ON,-DFEATURE_mtdev=OFF,mtdev"
 PACKAGECONFIG[no-opengl] = "-DINPUT_opengl=no"
-PACKAGECONFIG[png] = "-DFEATURE_png=ON,-DFEATURE_png=OFF,libpng"
+PACKAGECONFIG[png] = "-DFEATURE_system_png=ON,-DFEATURE_png=OFF,libpng"
 PACKAGECONFIG[tslib] = "-DFEATURE_tslib=ON,-DFEATURE_tslib=OFF,tslib"
 PACKAGECONFIG[vulkan] = "-DFEATURE_vulkan=ON,-DFEATURE_vulkan=OFF,vulkan-headers,vulkan-loader"
 PACKAGECONFIG[xcb] = "-DFEATURE_xcb=ON,-DFEATURE_xcb=OFF,libxcb xcb-util-wm xcb-util-image xcb-util-keysyms xcb-util-renderutil xcb-util-cursor"
@@ -162,6 +163,7 @@ EXTRA_OECMAKE += "\
 
 EXTRA_OECMAKE:append:class-target = "\
     -DFEATURE_rpath=OFF \
+    -DFEATURE_relocatable=OFF \
     -DQT_QPA_DEFAULT_PLATFORM=${QT_QPA_DEFAULT_PLATFORM} \
 "
 
