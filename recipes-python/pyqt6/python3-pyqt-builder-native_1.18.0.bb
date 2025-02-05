@@ -3,7 +3,7 @@ HOMEPAGE = "https://pypi.org/project/PyQt-builder/"
 LICENSE = "GPL-2.0-or-later"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=ed1d69a33480ebf4ff8a7a760826d84e"
 
-SRC_URI[sha256sum] = "fce0e92346d2a4296525b7ad9f02b74ea425f26210390ae0d3e4ca08c31cf4cc"
+SRC_URI[sha256sum] = "ce9930aafc1ce0af928a6944bcc80ecf78c23ffdcad6ac111306c4c71057848e"
 
 inherit pypi python_setuptools_build_meta native
 
