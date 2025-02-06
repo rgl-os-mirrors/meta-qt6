@@ -3,7 +3,7 @@ python __anonymous () {
         'gn', 'qt3d', 'qt5compat', 'qtapplicationmanager', 'qtbase', 'qtcharts',
         'qtcoap', 'qtconnectivity', 'qtdatavis3d', 'qtdeclarative', 'qtdeviceutilities',
         'qtgrpc', 'qthttpserver', 'qtimageformats', 'qtinterfaceframework', 'qtlanguageserver',
-        'qtlocation', 'qtlottie', 'qtmqtt', 'qtmultimedia', 'qtnetworkauth', 'qtopcua',
+        'qtlocation', 'qtlottie', 'qtmqtt', 'qtmultimedia', 'qtnetworkauth', 'qtopcua', 'qtpdf',
         'qtpositioning', 'qtquick3d', 'qtquick3dphysics', 'qtquicktimeline', 'qtremoteobjects',
         'qtscxml', 'qtsensors', 'qtserialbus', 'qtserialport', 'qtshadertools', 'qtspeech',
         'qtsvg', 'qttools', 'qttranslations', 'qtvirtualkeyboard', 'qtwayland', 'qtwebchannel',
