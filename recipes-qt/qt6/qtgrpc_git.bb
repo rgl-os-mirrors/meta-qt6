@@ -26,3 +26,4 @@ ALLOW_EMPTY:${PN}-tools = "1"
 BBCLASSEXTEND = "native nativesdk"
 
 INSANE_SKIP:${PN}-ptest += "buildpaths"
+INSANE_SKIP:${PN}-examples += "staticdev"
